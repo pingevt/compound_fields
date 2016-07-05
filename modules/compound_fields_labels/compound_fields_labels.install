@@ -1,0 +1,76 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the compound_fields_labels module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function compound_fields_labels_field_schema($field) {
+
+  $columns = array();
+  $indexes = array();
+  $foreign_keys = array();
+
+  switch ($field['type']) {
+  case 'text_long_text':
+    $columns = array(
+      'text_value' => array(
+        'type' => 'varchar',
+        'length' => $field['settings']['text_max_length'],
+        'not null' => FALSE,
+      ),
+      'longtext_value' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+      ),
+      'longtext_format' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    );
+
+    $indexes = array(
+      'longtext_format' => array('longtext_format'),
+    );
+
+    $foreign_keys = array(
+      'longtext_format' => array(
+        'table' => 'filter_format',
+        'columns' => array('format' => 'format'),
+      ),
+    );
+
+    break;
+  case 'text_text':
+    $columns = array(
+      'text_value' => array(
+        'type' => 'varchar',
+        'length' => $field['settings']['text_max_length'],
+        'not null' => FALSE,
+      ),
+      'text2_value' => array(
+        'type' => 'varchar',
+        'length' => $field['settings']['text2_max_length'],
+        'not null' => FALSE,
+      ),
+    );
+
+    $indexes = array();
+
+    $foreign_keys = array();
+
+    break;
+  }
+
+
+
+  return array(
+    'columns' => $columns,
+    'indexes' => $indexes,
+    'foreign keys' => $foreign_keys,
+  );
+}

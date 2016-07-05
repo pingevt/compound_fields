@@ -1,1 +1,5 @@
 name = Compound Fields
+description = Adds compound fields, widgets and formatters. This is simply the parent module. You will need to enable sub-modules to see any functionality.
+core = 7.x
+
+package = Compound Fields

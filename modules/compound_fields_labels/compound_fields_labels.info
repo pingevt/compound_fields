@@ -1,0 +1,7 @@
+name = Compound Fields: Label - Text Fields
+description = Adds compound field, widgets and formatters for common Label/Text type fields.
+core = 7.x
+
+package = Compound Fields
+
+dependencies[] = compound_fields
