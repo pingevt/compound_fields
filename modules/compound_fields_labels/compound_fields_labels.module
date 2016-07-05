@@ -10,7 +10,7 @@
 function compound_fields_labels_field_info() {
   return array(
     'text_long_text' => array(
-      'label' => t('Combo: Text-Long Text'),
+      'label' => t('Combo: Text-Long - Text'),
       'description' => t('This field stores a simple text field and a long text value together. Like a name value pair.'),
       'settings' => array(
         'text_max_length' => 255,
@@ -25,7 +25,7 @@ function compound_fields_labels_field_info() {
       'property_callbacks' => array('_text_long_text_property_info_callback'),
     ),
     'text_text' => array(
-      'label' => t('Combo: Text Text'),
+      'label' => t('Combo: Text - Text'),
       'description' => t('This field stores 2 simple text fields'),
       'settings' => array(
         'text_max_length' => 255,
@@ -48,7 +48,6 @@ function compound_fields_labels_field_info() {
  */
 function _text_long_text_property_info_callback(&$info, $entity_type, $field, $instance, $field_type) {
   $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$field['field_name']];
-
   $property['getter callback'] = 'entity_metadata_field_verbatim_get';
   $property['setter callback'] = 'entity_metadata_field_verbatim_set';
   unset($property['query callback']);
@@ -57,6 +56,8 @@ function _text_long_text_property_info_callback(&$info, $entity_type, $field, $i
     'type' => 'text',
     'label' => t('Text'),
     'setter callback' => 'entity_property_verbatim_set',
+    'getter callback' => 'entity_property_verbatim_get',
+    //'schema field' => 'dew_survey_count_to_complete',
     'required' => TRUE,
   );
 
@@ -64,6 +65,7 @@ function _text_long_text_property_info_callback(&$info, $entity_type, $field, $i
     'type' => 'text',
     'label' => t('Long Text'),
     'setter callback' => 'entity_property_verbatim_set',
+    'getter callback' => 'entity_property_verbatim_get',
     'required' => TRUE,
   );
 
@@ -342,6 +344,7 @@ function compound_fields_labels_field_load($entity_type, $entities, $field, $ins
  */
 function compound_fields_labels_field_formatter_info() {
   return array(
+    // Text-LongText
     'text_long_text_default' => array(
       'label' => t('Default'),
       'description' => 'Display default values for all items',
@@ -353,6 +356,25 @@ function compound_fields_labels_field_formatter_info() {
         'long_text_classes' => '',
       ),
     ),
+    'text_long_text_text' => array(
+      'label' => t('Text'),
+      'description' => 'Display Text values for all items',
+      'field types' => array('text_long_text'),
+      'settings' => array(
+        'text_wrapper' => 'h3',
+        'text_classes' => '',
+      ),
+    ),
+    'text_long_text_long' => array(
+      'label' => t('Longtext'),
+      'description' => 'Display Long text values for all items',
+      'field types' => array('text_long_text'),
+      'settings' => array(
+        'long_text_wrapper' => 'div',
+        'long_text_classes' => '',
+      ),
+    ),
+    // Text-Text
     'text_text_default' => array(
       'label' => t('Default'),
       'description' => 'Display default values for all items',
@@ -612,4 +634,3 @@ function theme_text_text_default_display($vars) {
 
   return $str;
 }
-
