@@ -275,7 +275,6 @@ function compound_fields_labels_field_widget_form(&$form, &$form_state, $field, 
         '#default_value' => isset($items[$delta]['text_value'])? $items[$delta]['text_value'] : '',
         '#weight' => -50,
       );
-
       $element['longtext_value'] = array(
         '#type' => 'text_format',
         '#title' => check_plain($instance_settings['long_text_label']),
@@ -291,7 +290,6 @@ function compound_fields_labels_field_widget_form(&$form, &$form_state, $field, 
         '#default_value' => isset($items[$delta]['text_value'])? $items[$delta]['text_value'] : '',
         '#weight' => -50,
       );
-
       $element['text2_value'] = array(
         '#type' => 'textfield',
         '#title' => check_plain($instance_settings['text2_label']),
@@ -366,7 +364,7 @@ function compound_fields_labels_field_formatter_info() {
       ),
     ),
     'text_long_text_long' => array(
-      'label' => t('Longtext'),
+      'label' => t('Long text'),
       'description' => 'Display Long text values for all items',
       'field types' => array('text_long_text'),
       'settings' => array(
@@ -421,6 +419,52 @@ function compound_fields_labels_field_formatter_settings_form($field, $instance,
         '#field_prefix' => 'class="',
         '#field_suffix' => '"',
       ),
+      'long_text_wrapper' => array(
+        '#type' => 'select',
+        '#title' => t('Long Text HTML Wrapper'),
+        '#options' => array(
+          'div' => 'div',
+          'span' => 'span',
+          '' => '-No wrapper-',
+        ),
+        '#default_value' => $settings['long_text_wrapper'],
+      ),
+      'long_text_classes' => array(
+        '#type' => 'textfield',
+        '#title' => t('Classes to add to the Long Text wrapper'),
+        '#default_value' => $settings['long_text_classes'],
+        '#field_prefix' => 'class="',
+        '#field_suffix' => '"',
+      ),
+    );
+    break;
+  case 'text_long_text_text':
+    $element = array(
+      'text_wrapper' => array(
+        '#type' => 'select',
+        '#title' => t('Text HTML Wrapper'),
+        '#options' => array(
+          'h2' => 'H2',
+          'h3' => 'H3',
+          'h4' => 'H4',
+          'h5' => 'H5',
+          'h6' => 'H6',
+          'span' => 'span',
+          'div' => 'div',
+        ),
+        '#default_value' => $settings['text_wrapper'],
+      ),
+      'text_classes' => array(
+        '#type' => 'textfield',
+        '#title' => t('Classes to add to the Text wrapper'),
+        '#default_value' => $settings['text_classes'],
+        '#field_prefix' => 'class="',
+        '#field_suffix' => '"',
+      ),
+    );
+    break;
+  case 'text_long_text_long':
+    $element = array(
       'long_text_wrapper' => array(
         '#type' => 'select',
         '#title' => t('Long Text HTML Wrapper'),
@@ -515,7 +559,27 @@ function compound_fields_labels_field_formatter_settings_summary($field, $instan
     $summary = implode('<br>', $summary_array);
 
     break;
-  case 'text_text':
+  case 'text_long_text_text':
+    $summary_array = array();
+    $summary_array[] = 'Text HTML Wrapper: ' . $settings['text_wrapper'];
+    if (!empty($settings['text_classes'])) {
+      $summary_array[] = 'Text Wrapper Classes: ' . $settings['text_classes'];
+    }
+
+    $summary = implode('<br>', $summary_array);
+
+    break;
+  case 'text_long_text_long':
+    $summary_array = array();
+    $summary_array[] = 'Long Text HTML Wrapper: ' . $settings['long_text_wrapper'];
+    if (!empty($settings['long_text_classes'])) {
+      $summary_array[] = 'Long Text Wrapper Classes: ' . $settings['long_text_classes'];
+    }
+
+    $summary = implode('<br>', $summary_array);
+
+    break;
+  case 'text_text_default':
     $summary_array = array();
     $summary_array[] = 'Text HTML Wrapper: ' . $settings['text_wrapper'];
     if (!empty($settings['text_classes'])) {
@@ -548,6 +612,22 @@ function compound_fields_labels_field_formatter_view($entity_type, $entity, $fie
         );
       }
       break;
+    case 'text_long_text_text':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'text_long_text_text_display',
+          '#item' => $item + array('settings' => $settings),
+        );
+      }
+      break;
+    case 'text_long_text_long':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'text_long_text_long_display',
+          '#item' => $item + array('settings' => $settings),
+        );
+      }
+      break;
     case 'text_text_default':
       foreach ($items as $delta => $item) {
         $element[$delta] = array(
@@ -566,6 +646,12 @@ function compound_fields_labels_field_formatter_view($entity_type, $entity, $fie
 function compound_fields_labels_theme($existing, $type, $theme, $path) {
   return array(
     'text_long_text_default_display' => array(
+      'render element' => 'item',
+    ),
+    'text_long_text_text_display' => array(
+      'render element' => 'item',
+    ),
+    'text_long_text_long_display' => array(
       'render element' => 'item',
     ),
     'text_text_default_display' => array(
@@ -605,6 +691,48 @@ function theme_text_long_text_default_display($vars) {
 }
 
 /**
+ * Theme function for text_long_text.
+ */
+function theme_text_long_text_text_display($vars) {
+  $field = $vars['item']['#item'];
+  $settings = $vars['item']['#item']['settings'];
+
+  $str = '';
+
+  // Build Text.
+  $str .= '<' . $settings['text_wrapper'];
+  if (!empty($settings['text_classes'])) {
+    $str .= ' class="' . $settings['text_classes'] . '"';
+  }
+  $str .= '>';
+  $str .= $field['text_value'];
+  $str .= '</' . $settings['text_wrapper'] . '>';
+
+  return $str;
+}
+
+/**
+ * Theme function for text_long_text.
+ */
+function theme_text_long_text_long_display($vars) {
+  $field = $vars['item']['#item'];
+  $settings = $vars['item']['#item']['settings'];
+
+  $str = '';
+
+  // Build Long Text.
+  $str .= '<' . $settings['long_text_wrapper'];
+  if (!empty($settings['long_text_classes'])) {
+    $str .= ' class="' . $settings['long_text_classes'] . '"';
+  }
+  $str .= '>';
+  $str .= $field['safe_longtext_value'];
+  $str .= '</' . $settings['long_text_wrapper'] . '>';
+
+  return $str;
+}
+
+/**
  * Theme function for text_text.
  */
 function theme_text_text_default_display($vars) {
@@ -630,7 +758,7 @@ function theme_text_text_default_display($vars) {
   }
   $str .= '>';
   $str .= $field['text2_value'];
-  $str .= '</' . $settings['text_wrapper'] . '>';
+  $str .= '</' . $settings['text2_wrapper'] . '>';
 
   return $str;
 }
