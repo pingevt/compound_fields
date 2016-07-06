@@ -1,12 +1,12 @@
 <?php
-/*
+/**
  * @file
  * Devel Generate for compound_fields_label module
  *
  */
 
-/*
- * Implements hook_devel_generate();
+/**
+ * Implements hook_devel_generate().
  */
 function compound_fields_labels_devel_generate($object, $field, $instance, $bundle) {
   if (field_behaviors_widget('multiple values', $instance) == FIELD_BEHAVIOR_CUSTOM) {
@@ -17,10 +17,13 @@ function compound_fields_labels_devel_generate($object, $field, $instance, $bund
   }
 }
 
+/**
+ * Creates dummy values for fields.
+ */
 function _compound_fields_label_devel_generate($object, $field, $instance, $bundle) {
   $obj = array();
 
-  switch($field['type']) {
+  switch ($field['type']) {
   case 'text_text':
     $obj['text_value'] = substr(devel_create_greeking(mt_rand(1, $field['settings']['text_max_length'] / 6), FALSE), 0, $field['settings']['text_max_length']);
     $obj['text2_value'] = substr(devel_create_greeking(mt_rand(1, $field['settings']['text2_max_length'] / 6), FALSE), 0, $field['settings']['text2_max_length']);
