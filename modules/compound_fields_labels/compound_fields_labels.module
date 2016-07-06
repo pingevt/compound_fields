@@ -384,6 +384,24 @@ function compound_fields_labels_field_formatter_info() {
         'text2_classes' => '',
       ),
     ),
+    'text_text_text' => array(
+      'label' => t('First Text'),
+      'description' => 'Display value for first text item',
+      'field types' => array('text_text'),
+      'settings' => array(
+        'text_wrapper' => 'div',
+        'text_classes' => '',
+      ),
+    ),
+    'text_text_text2' => array(
+      'label' => t('Second Text'),
+      'description' => 'Display value for second text item',
+      'field types' => array('text_text'),
+      'settings' => array(
+        'text2_wrapper' => 'div',
+        'text2_classes' => '',
+      ),
+    ),
   );
 }
 
@@ -531,6 +549,57 @@ function compound_fields_labels_field_formatter_settings_form($field, $instance,
 
     );
     break;
+  case 'text_text_text':
+    $element = array(
+      'text_wrapper' => array(
+        '#type' => 'select',
+        '#title' => t('Text HTML Wrapper'),
+        '#options' => array(
+          'h2' => 'H2',
+          'h3' => 'H3',
+          'h4' => 'H4',
+          'h5' => 'H5',
+          'h6' => 'H6',
+          'span' => 'span',
+          'div' => 'div',
+        ),
+        '#default_value' => $settings['text_wrapper'],
+      ),
+      'text_classes' => array(
+        '#type' => 'textfield',
+        '#title' => t('Classes to add to the Text wrapper'),
+        '#default_value' => $settings['text_classes'],
+        '#field_prefix' => 'class="',
+        '#field_suffix' => '"',
+      ),
+    );
+    break;
+  case 'text_text_text2':
+    $element = array(
+      'text2_wrapper' => array(
+        '#type' => 'select',
+        '#title' => t('Text HTML Wrapper'),
+        '#options' => array(
+          'h2' => 'H2',
+          'h3' => 'H3',
+          'h4' => 'H4',
+          'h5' => 'H5',
+          'h6' => 'H6',
+          'span' => 'span',
+          'div' => 'div',
+        ),
+        '#default_value' => $settings['text2_wrapper'],
+      ),
+      'text2_classes' => array(
+        '#type' => 'textfield',
+        '#title' => t('Classes to add to the Text wrapper'),
+        '#default_value' => $settings['text2_classes'],
+        '#field_prefix' => 'class="',
+        '#field_suffix' => '"',
+      ),
+
+    );
+    break;
   }
 
   return $element;
@@ -592,6 +661,24 @@ function compound_fields_labels_field_formatter_settings_summary($field, $instan
 
     $summary = implode('<br>', $summary_array);
     break;
+  case 'text_text_text':
+    $summary_array = array();
+    $summary_array[] = 'Text HTML Wrapper: ' . $settings['text_wrapper'];
+    if (!empty($settings['text_classes'])) {
+      $summary_array[] = 'Text Wrapper Classes: ' . $settings['text_classes'];
+    }
+
+    $summary = implode('<br>', $summary_array);
+    break;
+  case 'text_text_text2':
+    $summary_array = array();
+    $summary_array[] = 'Text2 HTML Wrapper: ' . $settings['text2_wrapper'];
+    if (!empty($settings['text_classes'])) {
+      $summary_array[] = 'Text2 Wrapper Classes: ' . $settings['text2_classes'];
+    }
+
+    $summary = implode('<br>', $summary_array);
+    break;
   }
 
   return $summary;
@@ -636,6 +723,22 @@ function compound_fields_labels_field_formatter_view($entity_type, $entity, $fie
         );
       }
       break;
+    case 'text_text_text':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'text_text_text_display',
+          '#item' => $item + array('settings' => $settings),
+        );
+      }
+      break;
+    case 'text_text_text2':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'text_text_text2_display',
+          '#item' => $item + array('settings' => $settings),
+        );
+      }
+      break;
   }
   return $element;
 }
@@ -658,6 +761,14 @@ function compound_fields_labels_theme($existing, $type, $theme, $path) {
       'file' => 'compound_fields_labels.theme.inc',
     ),
     'text_text_default_display' => array(
+      'render element' => 'item',
+      'file' => 'compound_fields_labels.theme.inc',
+    ),
+    'text_text_text_display' => array(
+      'render element' => 'item',
+      'file' => 'compound_fields_labels.theme.inc',
+    ),
+    'text_text_text2_display' => array(
       'render element' => 'item',
       'file' => 'compound_fields_labels.theme.inc',
     ),
