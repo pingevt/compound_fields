@@ -1,16 +1,12 @@
 <?php
-/**
- * @file
- *
- */
 
 /**
  * Implements hook_help().
  */
-// function compound_fields_help($path, $arg) {
-//  switch ($path) {
-//    // Main module help for the compound_fields module
-//    case 'admin/help#compound_fields':
-//      return '<p>' . t('This module provides new compound fields. You must enable the submodules in order to get the fields you might want.') . '</p>';
-//  }
-// }
+function compound_fields_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
+ switch ($route_name) {
+   // Main module help for the compound_fields module
+   case 'help.page.compound_fields':
+     return '<p>' . t('This module provides new compound fields. You must enable the submodules in order to get the fields you might want.') . '</p>';
+ }
+}
