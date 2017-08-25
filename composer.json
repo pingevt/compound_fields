@@ -1,0 +1,19 @@
+{
+    "name": "pingevt/compound_fields",
+    "description": "Provides custom Compound Fields",
+    "type": "drupal-module",
+    "homepage": "https://github.com/pingevt/compound_fields",
+    "authors": [
+        {
+            "name": "Pete Inge",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "",
+        "irc": "",
+        "source": "https://github.com/pingevt/compound_fields"
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+}
