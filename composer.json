@@ -1,7 +1,7 @@
 {
     "name": "pingevt/compound_fields",
     "description": "Provides custom Compound Fields",
-    "type": "drupal-module",
+    "type": "custom-drupal-module",
     "homepage": "https://github.com/pingevt/compound_fields",
     "authors": [
         {
